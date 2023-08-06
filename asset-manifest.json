@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/dmetroverse/static/css/main.073c9b0a.css",
-    "main.js": "/dmetroverse/static/js/main.243fd8c3.js",
+    "main.css": "/dmetroverse/static/css/main.e3c2067b.css",
+    "main.js": "/dmetroverse/static/js/main.085df723.js",
     "static/js/787.4d6a50c9.chunk.js": "/dmetroverse/static/js/787.4d6a50c9.chunk.js",
-    "static/media/logo.svg": "/dmetroverse/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/dmetroverse/index.html",
-    "main.073c9b0a.css.map": "/dmetroverse/static/css/main.073c9b0a.css.map",
-    "main.243fd8c3.js.map": "/dmetroverse/static/js/main.243fd8c3.js.map",
+    "main.e3c2067b.css.map": "/dmetroverse/static/css/main.e3c2067b.css.map",
+    "main.085df723.js.map": "/dmetroverse/static/js/main.085df723.js.map",
     "787.4d6a50c9.chunk.js.map": "/dmetroverse/static/js/787.4d6a50c9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.243fd8c3.js"
+    "static/css/main.e3c2067b.css",
+    "static/js/main.085df723.js"
   ]
 }
