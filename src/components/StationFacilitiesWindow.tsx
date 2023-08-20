@@ -3,17 +3,24 @@ import StationFacilities from "./StationFacilities";
 import { StationData } from "../common/types";
 
 interface StationFacilitiesWindowProps {
-  stations: StationData[];
+  stations: StationData[][];
 }
 
 const StationFacilitiesWindow: React.FC<StationFacilitiesWindowProps> = ({
   stations,
 }) => {
-  console.log(stations);
   return (
-    <div className="stations-window flex flex-nowrap overflow-x-auto space-x-4">
-      {stations.map((station: StationData, index: number) => (
-        <StationFacilities key={index} station={station} />
+    <div className="flex flex-col space-y-4">
+      {" "}
+      {/* Update this class */}
+      {stations.map((line: StationData[], index: number) => (
+        <div key={index} className="stations-window">
+          <div className="flex flex-nowrap space-x-4">
+            {line.map((station: StationData, idx: number) => (
+              <StationFacilities key={idx} station={station} />
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   );

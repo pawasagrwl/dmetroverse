@@ -13,7 +13,7 @@ const useFetch = <T,>(url: string): FetchState<T> => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (url === "https://dmetroverse.fly.dev//") return; // don't fetch if url is not set
+    if (!url) return; // don't fetch if url is not set
     const fetchData = async () => {
       setIsPending(true);
       try {

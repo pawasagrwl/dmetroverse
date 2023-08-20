@@ -12,7 +12,6 @@ const RedditPostGallery: React.FC = () => {
   if (!redditResponse || !redditResponse.data.children) return null;
 
   const posts = redditResponse.data.children.map(child => child.data);
-
   return (
     <div className="max-w-md mx-auto">
       <h2 className="font-bold text-2xl mb-2">Delhi Subreddit Posts about Metro:</h2>
@@ -21,7 +20,7 @@ const RedditPostGallery: React.FC = () => {
           <RedditPost
             key={index}
             title={post.title}
-            body={post.selftext}
+            body={post.selftext_html}
             url={post.url}
           />
         ))}

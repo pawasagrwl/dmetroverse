@@ -7,10 +7,11 @@ import { JourneyContext } from "../context/JourneyContext";
 const Body: React.FC = () => {
   const [origin, setOrigin] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
+  const [journeyType, setJourneyType] = useState<string>("");
   return (
     <div>
       <JourneyContext.Provider
-        value={{ origin, setOrigin, destination, setDestination }}
+        value={{ origin, setOrigin, destination, setDestination, journeyType, setJourneyType }}
       >
         <JourneyForm />
         <FoodFacilities />

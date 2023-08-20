@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { station_list } from "../data/en/station_list";
 import { JourneyContext } from "../context/JourneyContext";
 
 const JourneyForm: React.FC = () => {
   const { origin, setOrigin, destination, setDestination } =
     useContext(JourneyContext);
-
+  const [journeyType, setJourneyType] = useState("least-distance");
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -18,7 +18,10 @@ const JourneyForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex space-x-4 max-w-md mx-auto px-4 py-2">
+    <form
+      onSubmit={handleSubmit}
+      className="flex space-x-4 max-w-md mx-auto px-4 py-2"
+    >
       <div>
         <label
           htmlFor="origin"
@@ -40,7 +43,6 @@ const JourneyForm: React.FC = () => {
           ))}
         </select>
       </div>
-
       <div>
         <label
           htmlFor="destination"
@@ -62,6 +64,40 @@ const JourneyForm: React.FC = () => {
           ))}
         </select>
       </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Journey Type
+        </label>
+        <div className="mt-1">
+          <label>
+            <input
+              type="radio"
+              name="journeyType"
+              value="least-distance"
+              checked={journeyType === "least-distance"}
+              onChange={(e) => setJourneyType(e.target.value)}
+            />
+            Least Distance
+          </label>
+          <br/>
+          <label>
+            <input
+              type="radio"
+              name="journeyType"
+              value="minimum-interchange"
+              checked={journeyType === "minimum-interchange"}
+              onChange={(e) => setJourneyType(e.target.value)}
+            />
+            Minimum Interchange
+          </label>
+        </div>
+      </div>
+      <button
+        type="submit"
+        className="px-4 py-2 bg-indigo-600 text-white rounded"
+      >
+        Submit
+      </button>
     </form>
   );
 };

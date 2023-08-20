@@ -1,6 +1,6 @@
 export interface RedditPostData {
   title: string;
-  selftext: string;
+  selftext_html: string;
   url: string;
 }
 
@@ -19,7 +19,7 @@ export interface RouteData {
 
 export interface FacilityDetail {
   facility_name: string;
-  purpose: string;
+  purpose: string | null;
   location_description: string;
   nearest_gate_code: string;
   nearest_gate_name: string;
@@ -53,5 +53,8 @@ export interface JourneyContextType {
   setOrigin: (value: string) => void;
   destination: string;
   setDestination: (value: string) => void;
+  journeyType: string;
+  setJourneyType: (type: string) => void; 
 }
+
 

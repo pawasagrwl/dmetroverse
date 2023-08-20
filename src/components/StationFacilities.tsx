@@ -1,19 +1,42 @@
-import React from 'react';
-import { Facility, StationData } from '../common/types';
+import React from "react";
+import { Facility, StationData } from "../common/types";
 
 interface StationFacilitiesProps {
   station: StationData;
 }
 
 const StationFacilities: React.FC<StationFacilitiesProps> = ({ station }) => (
-  <div className="station-card bg-blue-200 rounded-lg p-4 m-4">
-    <h3 className="text-xl font-bold">{station.stationName}</h3>
-    <ul className="list-disc ml-5">
-      {station.facilities.map((facility: Facility, index: number) => (
-        <li key={index}>{facility.kind}</li>
-      ))}
-    </ul>
+  <div className="station-card bg-blue-200 rounded-lg p-4 m-4 flex flex-col">
+    <h3
+      className={`text-xl font-bold ${
+        station.facilities.length === 0 ? "text-red-500" : "text-green-500"
+      }`}
+    >
+      {station.stationName}
+    </h3>
+    <div className="overflow-y-auto flex-grow">
+      {" "}
+      {/* Update this class */}
+      {station.facilities.length > 0
+        ? station.facilities.flatMap((facility: Facility, facilityIndex) =>
+            facility.detail_list.map((detail, index) => (
+              <div key={index} style={{ whiteSpace: "nowrap" }}>
+                <strong>
+                  {detail.facility_name}
+                </strong>
+                <div className="flex flex-wrap">
+                  <strong>Purpose:</strong> {detail.purpose || "N/A"}
+                </div>
+                <div className="flex flex-row flex-wrap">
+                  <strong>Location:</strong>{" "}
+                  {detail.location_description || "N/A"}
+                </div>
+                <br />
+              </div>
+            ))
+          )
+        : "No facilities available"}
+    </div>
   </div>
 );
-
 export default StationFacilities;

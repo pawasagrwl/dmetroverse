@@ -1,5 +1,5 @@
 import he from 'he';
-
+import parse from 'html-react-parser';
 interface RedditPostProps {
   title: string;
   body: string;
@@ -8,12 +8,17 @@ interface RedditPostProps {
 
 const RedditPost: React.FC<RedditPostProps> = ({ title, body, url }) => {
   const decodedTitle = he.decode(title);
-  const decodedBody = body && body.length > 400 ? he.decode(`${body.substring(0, 397)}...`) : he.decode(body);
+  let decodedBody = body ? body.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&') : "No text" ;
+   // Check if the body is longer than 400 characters
+   if (decodedBody.length > 400) {
+    decodedBody = `${decodedBody.substring(0, 388)}...(read more)`;
+  }
+  const htmlBody = parse(decodedBody);
   return (
     <div className="border border-gray-300 rounded p-2 mb-2 overflow-hidden whitespace-wrap">
-      <a href={url} className="text-decoration-none text-black">
-        <h3 className="font-bold">{decodedTitle}</h3>
-      <p className="overflow-hidden text-gray-700">{decodedBody || "No text"}</p>
+      <a href={url} className="text-decoration-none text-black" target="_blank">
+        <h3 className="font-bold underline">{decodedTitle}</h3>
+      <p className="overflow-hidden text-gray-700">{htmlBody}</p>
       </a>
     </div>
   );
