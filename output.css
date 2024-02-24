@@ -10,7 +10,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     -webkit-animation: App-logo-spin infinite 20s linear;
-            animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear;
   }
 }
 
@@ -32,29 +32,29 @@
 @-webkit-keyframes App-logo-spin {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes App-logo-spin {
   from {
     -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   to {
     -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 .station-card {
-  border: 1px solid #ddd;
+  border: 1px solid black;
   margin: 10px;
   padding: 20px;
   width: 200px;
@@ -63,7 +63,7 @@
 .stations-window {
   display: flex;
   overflow-x: scroll;
-  padding: 20px;
+  padding: 200px;
   width: 90%;
   margin: auto;
   border: 1px solid #ddd;

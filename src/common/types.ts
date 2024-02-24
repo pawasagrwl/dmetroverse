@@ -1,7 +1,46 @@
+export interface RedditMediaMetadata {
+  s: {
+    u: string;
+  };
+}
+
 export interface RedditPostData {
   title: string;
   selftext_html: string;
   url: string;
+  author: string;
+  ups: number;
+  created_utc: number;
+  preview?: {
+    images: [
+      {
+        source: {
+          url: string;
+        };
+      }
+    ];
+  };
+  secure_media?: {
+    reddit_video?: {
+      fallback_url: string;
+    };
+  };
+  is_gallery?: boolean;
+  media_metadata?: { [key: string]: RedditMediaMetadata };
+}
+
+
+
+export interface RedditPostProps {
+  title: string;
+  body: string;
+  url: string;
+  username: string;
+  votes: number;
+  createdUtc: number;
+  imageUrl?: string; // For single images
+  gallery?: string[]; // Array of image URLs for galleries
+  videoUrl?: string;
 }
 
 export interface RedditResponse {

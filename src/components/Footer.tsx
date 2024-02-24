@@ -1,10 +1,44 @@
 import React from 'react';
+import { Box, Container, Typography, Link } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
-const Footer = () => (
-  <footer className="bg-gray-800 text-white p-4 flex justify-between items-center">
-    <a href="https://github.com/pawasagrwl/dmetroverse-code" className="text-blue-500 hover:underline" target='_blank'>View source on Github</a>
-    <p>&copy; 2023 Pawas Aggarwal</p>
-  </footer>
-);
+const Footer = () => {
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === 'dark';
+
+  return (
+    <Box
+      component="footer"
+      sx={{
+        py: 2, // Padding Y-axis
+        px: 3, // Padding X-axis
+        mt: 'auto', // Margin top auto for pushing it to the bottom of the layout
+        backgroundColor: isDarkMode ? 'grey.800' : 'grey.100', // Background color changes with theme
+        color: isDarkMode ? 'grey.300' : 'grey.800', // Text color changes with theme
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <Link
+        href="https://github.com/pawasagrwl/dmetroverse-code"
+        target="_blank"
+        rel="noopener noreferrer"
+        sx={{
+          color: isDarkMode ? 'blue.500' : 'blue.700', // Adjusting link color based on theme
+          textDecoration: 'none',
+          '&:hover': {
+            textDecoration: 'underline',
+          },
+        }}
+      >
+        View source on Github
+      </Link>
+      <Typography variant="body2">
+        &copy; {new Date().getFullYear()} Pawas Aggarwal
+      </Typography>
+    </Box>
+  );
+};
 
 export default Footer;

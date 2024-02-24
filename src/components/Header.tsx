@@ -1,28 +1,56 @@
 import React, { useState } from 'react';
+import { useTheme as useAppTheme } from '../context/ThemeContext'; // Adjust the import path as necessary
+import { AppBar, Toolbar, Typography, IconButton, Button, MenuItem, Select, Box, Container, useMediaQuery, styled } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import { useTheme } from '@mui/material/styles';
+
+const CustomToggleButton = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+}));
 
 const Header = () => {
-  const [theme, setTheme] = useState('dark');
   const [language, setLanguage] = useState('en');
-
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+  const { toggleTheme } = useAppTheme(); // Your ThemeContext hook
+  const muiTheme = useTheme();
+  const isDarkMode = muiTheme.palette.mode === 'dark'; // Determine theme mode using MUI's theme
+  const isLargeScreen = useMediaQuery(muiTheme.breakpoints.up('lg'));
 
   return (
-    <header className="flex justify-between p-4 bg-blue-600 text-white">
-      <div className="space-x-4">
-        <button className="bg-blue-400 px-3 py-1 rounded">Food</button>
-        <button className="bg-blue-400 px-3 py-1 rounded">Route</button>
-        <button className="bg-blue-400 px-3 py-1 rounded">Other</button>
-      </div>
-      <h1 className="text-3xl font-bold underline">DMetroVerse</h1>
-      <div className="flex items-center space-x-4">
-        <select value={language} onChange={(e) => setLanguage(e.target.value)} className="bg-white text-black px-3 py-1 rounded">
-          <option value="en">English</option>
-          <option value="hi">Hindi</option>
-          <option value="fr">French</option>
-        </select>
-        <button onClick={toggleTheme} className="bg-blue-400 px-3 py-1 rounded">Theme: {theme}</button>
-      </div>
-    </header>
+    <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider', backgroundColor: muiTheme.palette.background.paper }}>
+      <Container maxWidth="lg">
+        <Toolbar disableGutters>
+          <IconButton
+            size="large"
+            edge="start"
+            aria-label="menu"
+            sx={{ mr: 2, display: isLargeScreen ? 'none' : 'flex' }}
+            onClick={() => {/* Toggle sidebar logic here */}}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+            DMetroVerse
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              sx={{ mr: 2, minWidth: 120 }}
+              size="small"
+            >
+              <MenuItem value="en">English</MenuItem>
+              <MenuItem value="hi">Hindi</MenuItem>
+              <MenuItem value="fr">French</MenuItem>
+            </Select>
+            <CustomToggleButton color="inherit" onClick={toggleTheme}>
+              {isDarkMode ? <NightsStayIcon /> : <WbSunnyIcon />}
+            </CustomToggleButton>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 

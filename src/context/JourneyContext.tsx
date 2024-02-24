@@ -10,7 +10,7 @@ export const JourneyContext = createContext<JourneyContextType>({
   setOrigin: () => {},
   destination: '',
   setDestination: () => {},
-  journeyType: '',
+  journeyType: 'least-distance',
   setJourneyType: () => {},
 });
 

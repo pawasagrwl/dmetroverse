@@ -39,7 +39,7 @@
 }
 
 .station-card {
-  border: 1px solid #ddd;
+  border: 1px solid black;
   margin: 10px;
   padding: 20px;
   width: 200px;
@@ -51,6 +51,6 @@
   padding: 20px;
   width: 90%;
   margin: auto;
-  border: 1px solid #ddd;
+  border: 1px solid black;
   height: 300px;
 }

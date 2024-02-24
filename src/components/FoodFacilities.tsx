@@ -3,11 +3,10 @@ import useFetch from "../common/hooks/useFetch";
 import { StationData, RouteData } from "../common/types";
 import StationFacilitiesWindow from "./StationFacilitiesWindow";
 import { JourneyContext } from "../context/JourneyContext";
-import { all } from "axios";
 
 const FoodFacilities: React.FC = () => {
   const { origin, destination, journeyType  } = useContext(JourneyContext);
-
+  
   const be_port = process.env.REACT_APP_BE_PORT ?? 3000;
   const be_url = process.env.REACT_APP_BE_URL ?? `http://localhost:${be_port}`;
   const apiURL =
@@ -16,10 +15,12 @@ const FoodFacilities: React.FC = () => {
       : "";
 
   const [stationsData, setStationsData] = useState<StationData[][]>([]);
+  const [isDone, setIsDone] = useState(false);
   const { response: routeData, error, isPending } = useFetch<RouteData>(apiURL);
   useEffect(() => {
     const fetchStationsData = async () => {
       const allMapPathsData: StationData[][] = [];
+      setIsDone(false)
       if (routeData && routeData.route.length > 0) {
         for (const routeObj of routeData.route) {
           const stationCodesSet: Set<string> = new Set();
@@ -62,18 +63,19 @@ const FoodFacilities: React.FC = () => {
           allMapPathsData.push(stationDataArr);
         }
       }
-      setStationsData(allMapPathsData)
+      setStationsData(allMapPathsData);
+      setIsDone(true)
     };
     fetchStationsData();
   }, [routeData]);
 
-  if (isPending) return <div className="text-lg">Loading...</div>;
+  if (isPending || !isDone) return <div className="text-lg">Loading Food Facilities...</div>;
   if (error) return <div className="text-red-500 text-lg">Error: {error}</div>;
-  if (!routeData || !routeData.route[0]["map-path"]) return null;
+  if (!routeData || !routeData.route[0]["map-path"]) return <div className="text-lg">Please choose a journey</div>;
 
   return (
     <div>
-      {origin && destination ? (
+      {(origin && destination)? (
         <>
           <h2 className="text-2xl font-bold">Food Facilities:</h2>
           <StationFacilitiesWindow stations={stationsData} />

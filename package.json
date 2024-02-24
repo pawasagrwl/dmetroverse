@@ -5,6 +5,10 @@
   "homepage": "https://pawasagrwl.github.io/dmetroverse",
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.10",
+    "@mui/material": "^5.15.10",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,6 +17,7 @@
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "axios": "^1.4.0",
+    "date-fns": "^3.3.1",
     "he": "^1.2.0",
     "html-react-parser": "^4.2.1",
     "react": "^18.2.0",
