@@ -1,6 +1,12 @@
 import React, { useContext, useState } from "react";
-import { station_list } from "../data/en/station_list";
 import { JourneyContext } from "../context/JourneyContext";
+import { station_list } from "../data/en/station_list";
+import { AppBar, Toolbar, Button, RadioGroup, FormControlLabel, Radio, Autocomplete, TextField } from '@mui/material';
+
+interface Station {
+  station_code: string;
+  station_name: string;
+}
 
 const JourneyForm: React.FC = () => {
   const {
@@ -12,107 +18,65 @@ const JourneyForm: React.FC = () => {
     setJourneyType,
   } = useContext(JourneyContext);
 
-  const [localOrigin, setLocalOrigin] = useState(origin);
-  const [localDestination, setLocalDestination] = useState(destination);
-  const [localJourneyType, setLocalJourneyType] = useState('least-distance');
+  const [localOrigin, setLocalOrigin] = useState<Station | null>(
+    station_list.find((station) => station.station_code === origin) || null
+  );
+  const [localDestination, setLocalDestination] = useState<Station | null>(
+    station_list.find((station) => station.station_code === destination) || null
+  );
+  const [localJourneyType, setLocalJourneyType] = useState(journeyType || 'least-distance');
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (localOrigin === localDestination) {
+    if (!localOrigin || !localDestination || localOrigin.station_code === localDestination.station_code) {
       alert("Origin and destination cannot be the same.");
       return;
     }
-    setOrigin(localOrigin);
-    setDestination(localDestination);
+    setOrigin(localOrigin.station_code);
+    setDestination(localDestination.station_code);
     setJourneyType(localJourneyType);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-xl mx-auto px-4 py-2 flex flex-col space-y-4"
-    >
-      <div className="flex space-x-4 items-center">
-        <div className="flex-1">
-          <label
-            htmlFor="origin"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Origin
-          </label>
-          <select
-            id="origin"
-            name="origin"
-            value={localOrigin}
-            onChange={(e) => setLocalOrigin(e.target.value)}
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          >
-            <option value="">Select Origin</option>
-            {station_list.map((station) => (
-              <option key={station.station_code} value={station.station_code}>
-                {station.station_name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="text-xl font-semibold"></div>
-        <div className="flex-1">
-          <label
-            htmlFor="destination"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Destination
-          </label>
-          <select
-            id="destination"
-            name="destination"
-            value={localDestination}
-            onChange={(e) => setLocalDestination(e.target.value)}
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          >
-            <option value="">Select Destination</option>
-            {station_list.map((station) => (
-              <option key={station.station_code} value={station.station_code}>
-                {station.station_name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="text-center font-medium text-gray-700 mb-2">
-        Route Type
-      </div>
-      <div className="flex justify-center space-x-4 mb-4">
-        <label>
-          <input
-            type="radio"
-            name="journeyType"
-            value="least-distance"
-            checked={localJourneyType === 'least-distance'}
-            onChange={(e) => setLocalJourneyType(e.target.value)}
-          />
-          Least Distance
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="journeyType"
-            value="minimum-interchange"
-            checked={localJourneyType === 'minimum-interchange'}
-            onChange={(e) => setLocalJourneyType(e.target.value)}
-          />
-          Minimum Interchange
-        </label>
-      </div>
-      <div className="flex justify-center">
-        <button
-          type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded"
+    <AppBar position="sticky" color="default" elevation={0}>
+      <Toolbar component="form" onSubmit={handleSubmit} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+        
+        <Autocomplete
+          options={station_list}
+          getOptionLabel={(option) => option.station_name}
+          value={localOrigin}
+          onChange={(event, newValue) => {
+            setLocalOrigin(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} label="Origin" />}
+          sx={{ width: 240 }}
+          size="small"
+        />
+        
+        <Autocomplete
+          options={station_list}
+          getOptionLabel={(option) => option.station_name}
+          value={localDestination}
+          onChange={(event, newValue) => {
+            setLocalDestination(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} label="Destination" />}
+          sx={{ width: 240 }}
+          size="small"
+        />
+
+        <RadioGroup
+          value={localJourneyType}
+          onChange={(e) => setLocalJourneyType(e.target.value)}
+          sx={{ flexDirection: 'column' }}
         >
-          Submit
-        </button>
-      </div>
-    </form>
+          <FormControlLabel value="least-distance" control={<Radio size="small" />} label="Least Distance" />
+          <FormControlLabel value="minimum-interchange" control={<Radio size="small" />} label="Minimum Interchange" />
+        </RadioGroup>
+
+        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>Submit</Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 

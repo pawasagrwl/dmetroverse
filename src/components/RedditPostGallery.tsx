@@ -66,7 +66,7 @@ const RedditPostGallery: React.FC = () => {
           <RedditPost
             key={index}
             title={post.title}
-            body={post.body} // Ensure this matches the expected prop
+            body={post.body}
             url={post.url}
             username={post.username}
             votes={post.votes}
