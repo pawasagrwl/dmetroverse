@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import useFetch from "../common/hooks/useFetch";
-import { StationData, RouteData } from "../common/types";
+import useFetch from "../../common/hooks/useFetch";
+import { StationData, RouteData } from "../../common/types";
 import StationFacilitiesWindow from "./StationFacilitiesWindow";
-import { JourneyContext } from "../context/JourneyContext";
+import { JourneyContext } from "../../context/JourneyContext";
 
 const FoodFacilities: React.FC = () => {
   const { origin, destination, journeyType  } = useContext(JourneyContext);

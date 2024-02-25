@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { JourneyContext } from "../context/JourneyContext";
-import { station_list } from "../data/en/station_list";
+import { JourneyContext } from "../../context/JourneyContext";
+import { station_list } from "../../data/en/station_list";
 import { AppBar, Toolbar, Button, RadioGroup, FormControlLabel, Radio, Autocomplete, TextField } from '@mui/material';
 
 interface Station {

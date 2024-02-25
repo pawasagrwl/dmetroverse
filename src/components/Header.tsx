@@ -1,29 +1,25 @@
 import React, { useState } from "react";
-import { useTheme as useAppTheme } from "../context/ThemeContext"; // Adjust the import path as necessary
 import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton,
-  Button,
-  MenuItem,
-  Select,
   Box,
   Container,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
   useMediaQuery,
-  styled,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import NightsStayIcon from "@mui/icons-material/NightsStay";
-import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import { useTheme } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import LanguageSelector from "./header/LanguageSelector";
+import ThemeToggleButton from "./header/ThemeToggler";
+import FeatureToggleButton from "./header/FeatureToggler";
 import { HeaderProps } from "../common/types";
 
-const CustomToggleButton = styled(Button)(({ theme }) => ({
-  marginLeft: theme.spacing(1),
-}));
-
-// Apply the interface here
 const Header: React.FC<HeaderProps> = ({
   setShowFoodFacilities,
   setShowRedditPosts,
@@ -31,55 +27,68 @@ const Header: React.FC<HeaderProps> = ({
   showRedditPosts,
 }) => {
   const [language, setLanguage] = useState("en");
-  const { toggleTheme } = useAppTheme(); // Your ThemeContext hook
+  const [mobileOpen, setMobileOpen] = useState(false);
   const muiTheme = useTheme();
-  const isDarkMode = muiTheme.palette.mode === "dark"; // Determine theme mode using MUI's theme
   const isLargeScreen = useMediaQuery(muiTheme.breakpoints.up("lg"));
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <List>
+        <ListItem>
+          <LanguageSelector language={language} setLanguage={setLanguage} />
+        </ListItem>
+        <ListItem>
+          <FeatureToggleButton
+            icon={<FastfoodIcon />}
+            tooltip={
+              showFoodFacilities
+                ? "Hide Food Facilities"
+                : "Show Food Facilities"
+            }
+            onClick={() => setShowFoodFacilities(!showFoodFacilities)}
+          />
+          <Typography>
+            {showFoodFacilities
+              ? "Hide Food Facilities"
+              : "Show Food Facilities"}
+          </Typography>
+        </ListItem>
+        <ListItem>
+          <FeatureToggleButton
+            icon={<PostAddIcon />}
+            tooltip={
+              showRedditPosts ? "Hide Reddit Posts" : "Show Reddit Posts"
+            }
+            onClick={() => setShowRedditPosts(!showRedditPosts)}
+          />
+          <Typography>
+            {showRedditPosts ? "Hide Reddit Posts" : "Show Reddit Posts"}
+          </Typography>
+        </ListItem>
+
+        <ListItem>
+          <ThemeToggleButton />
+          <Typography>
+            Switch Theme
+          </Typography>
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
     <AppBar
       position="static"
       color="default"
       elevation={0}
-      sx={{
-        borderBottom: 1,
-        borderColor: "divider",
-        backgroundColor: muiTheme.palette.background.paper,
-      }}
+      sx={{ borderBottom: 1, borderColor: "divider" }}
     >
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          <IconButton
-            size="large"
-            edge="start"
-            aria-label="menu"
-            sx={{ mr: 2, display: isLargeScreen ? "none" : "flex" }}
-            onClick={() => {
-              /* Toggle sidebar logic here */
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box sx={{ display: "flex", gap: 2 }}>
-            {isLargeScreen && (
-              <>
-                <Button
-                  color="inherit"
-                  variant={showFoodFacilities ? "contained" : "outlined"}
-                  onClick={() => setShowFoodFacilities(!showFoodFacilities)}
-                >
-                  Food Facilities
-                </Button>
-                <Button
-                  color="inherit"
-                  variant={showRedditPosts ? "contained" : "outlined"}
-                  onClick={() => setShowRedditPosts(!showRedditPosts)}
-                >
-                  Reddit Posts
-                </Button>
-              </>
-            )}
-          </Box>
           <Typography
             variant="h6"
             noWrap
@@ -88,21 +97,48 @@ const Header: React.FC<HeaderProps> = ({
           >
             DMetroVerse
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              sx={{ mr: 2, minWidth: 120 }}
-              size="small"
+          {isLargeScreen ? (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <LanguageSelector language={language} setLanguage={setLanguage} />
+              <FeatureToggleButton
+                icon={<FastfoodIcon />}
+                tooltip={
+                  showFoodFacilities
+                    ? "Hide Food Facilities"
+                    : "Show Food Facilities"
+                }
+                onClick={() => setShowFoodFacilities(!showFoodFacilities)}
+              />
+              <FeatureToggleButton
+                icon={<PostAddIcon />}
+                tooltip={
+                  showRedditPosts ? "Hide Reddit Posts" : "Show Reddit Posts"
+                }
+                onClick={() => setShowRedditPosts(!showRedditPosts)}
+              />
+              <ThemeToggleButton />
+            </Box>
+          ) : (
+            <Drawer
+              anchor="right"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true,
+              }}
             >
-              <MenuItem value="en">English</MenuItem>
-              <MenuItem value="hi">Hindi</MenuItem>
-              <MenuItem value="fr">French</MenuItem>
-            </Select>
-            <CustomToggleButton color="inherit" onClick={toggleTheme}>
-              {isDarkMode ? <NightsStayIcon /> : <WbSunnyIcon />}
-            </CustomToggleButton>
-          </Box>
+              {drawer}
+            </Drawer>
+          )}
+          <IconButton
+            size="large"
+            edge="start"
+            aria-label="menu"
+            sx={{ mr: 2, display: { xs: "flex", lg: "none" } }}
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>

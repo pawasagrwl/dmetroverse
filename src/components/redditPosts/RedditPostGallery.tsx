@@ -1,7 +1,7 @@
 import React from "react";
-import useFetch from "../common/hooks/useFetch";
+import useFetch from "../../common/hooks/useFetch";
 import RedditPost from "./RedditPost";
-import { RedditPostData } from "../common/types";
+import { RedditPostData } from "../../common/types";
 import { Box, Typography, CircularProgress } from "@mui/material";
 
 const RedditPostGallery: React.FC = () => {
@@ -52,7 +52,7 @@ const RedditPostGallery: React.FC = () => {
   return (
     <Box maxWidth="md" mx="auto">
       <Typography variant="h5" mb={2}>
-        Posts about Metro from r/Delhi:
+        Posts about Delhi Metro from r/Delhi:
       </Typography>
       <Box
         maxHeight="96vh"

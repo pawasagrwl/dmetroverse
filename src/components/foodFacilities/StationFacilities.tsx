@@ -1,5 +1,5 @@
 import React from "react";
-import { Facility, StationData } from "../common/types";
+import { Facility, StationData } from "../../common/types";
 
 interface StationFacilitiesProps {
   station: StationData;

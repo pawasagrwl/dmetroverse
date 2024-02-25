@@ -1,6 +1,6 @@
 import React from "react";
 import StationFacilities from "./StationFacilities";
-import { StationData } from "../common/types";
+import { StationData } from "../../common/types";
 
 interface StationFacilitiesWindowProps {
   stations: StationData[][];
