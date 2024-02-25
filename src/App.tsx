@@ -2,13 +2,24 @@ import { ThemeProvider } from './context/ThemeContext'; // Adjust the import pat
 import Header from "./components/Header";
 import Body from "./components/Body";
 import Footer from "./components/Footer";
+import { useState } from 'react';
 
 function App() {
+  const [showFoodFacilities, setShowFoodFacilities] = useState(true);
+  const [showRedditPosts, setShowRedditPosts] = useState(true);
   return (
     <ThemeProvider>
       <div className="App">
-        <Header />
-        <Body />
+      <Header 
+        setShowFoodFacilities={setShowFoodFacilities} 
+        setShowRedditPosts={setShowRedditPosts}
+        showFoodFacilities={showFoodFacilities}
+        showRedditPosts={showRedditPosts}
+      />
+      <Body 
+        showFoodFacilities={showFoodFacilities} 
+        showRedditPosts={showRedditPosts}
+      />
         <Footer />
       </div>
     </ThemeProvider>
