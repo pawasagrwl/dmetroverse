@@ -11,11 +11,11 @@ type ThemeContextType = {
   mode: "light" | "dark";
 };
 
-// Creating the context with a default value
-const ThemeContext = createContext<ThemeContextType>({
+export const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
-  mode: "dark",
+  mode: 'dark', // default value
 });
+
 // Custom hook to use the theme context
 export const useTheme = () => useContext(ThemeContext);
 

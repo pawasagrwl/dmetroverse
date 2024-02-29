@@ -50,6 +50,24 @@ export interface RedditResponse {
   };
 }
 
+export interface PostHeaderProps {
+  title: string;
+  url: string;
+}
+
+export interface PostBodyProps {
+  body: string;
+  imageUrl?: string; // Optional prop for single images
+  gallery?: string[]; // Optional prop for an array of image URLs for galleries
+  videoUrl?: string; // Optional prop for a video URL
+}
+
+export interface PostFooterProps {
+  username: string;
+  votes: number;
+  createdUtc: number;
+}
+
 export interface RouteData {
   route: {
     "map-path": string[];
@@ -102,4 +120,9 @@ export interface HeaderProps {
   setShowRedditPosts: (show: boolean) => void;
   showFoodFacilities: boolean;
   showRedditPosts: boolean;
+}
+
+export interface Station {
+  station_code: string;
+  station_name: string;
 }

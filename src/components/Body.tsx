@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import FoodFacilities from "./foodFacilities/FoodFacilities";
-import RedditPostGallery from "./redditPosts/RedditPostGallery";
-import JourneyForm from "./foodFacilities/JourneyForm";
+import FoodFacilities from "./body/foodFacilities/FoodFacilities";
+import RedditPostGallery from "./body/redditPosts/RedditPostGallery";
+import JourneyForm from "./body/foodFacilities/JourneyForm";
 import { JourneyContext } from "../context/JourneyContext";
 
 const Body: React.FC<{
@@ -26,6 +26,8 @@ const Body: React.FC<{
         >
           {showFoodFacilities && (
             <>
+              
+
               <JourneyForm />
               <FoodFacilities />
             </>

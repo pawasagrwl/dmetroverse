@@ -1,10 +1,9 @@
-import React from 'react';
-import { Box, Container, Typography, Link } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, Typography, Link } from '@mui/material';
+import { useTheme } from '../context/ThemeContext';
 
 const Footer = () => {
   const theme = useTheme();
-  const isDarkMode = theme.palette.mode === 'dark';
+  const isDarkMode = theme.mode === 'dark';
 
   return (
     <Box
@@ -18,6 +17,7 @@ const Footer = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        
       }}
     >
       <Link

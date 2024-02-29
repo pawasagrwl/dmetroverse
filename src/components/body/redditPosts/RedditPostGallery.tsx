@@ -1,7 +1,7 @@
 import React from "react";
-import useFetch from "../../common/hooks/useFetch";
+import useFetch from "../../../common/hooks/useFetch";
 import RedditPost from "./RedditPost";
-import { RedditPostData } from "../../common/types";
+import { RedditPostData } from "../../../common/types";
 import { Box, Typography, CircularProgress } from "@mui/material";
 
 const RedditPostGallery: React.FC = () => {

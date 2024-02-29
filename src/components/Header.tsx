@@ -50,6 +50,7 @@ const Header: React.FC<HeaderProps> = ({
                 : "Show Food Facilities"
             }
             onClick={() => setShowFoodFacilities(!showFoodFacilities)}
+            active={showFoodFacilities}
           />
           <Typography>
             {showFoodFacilities
@@ -64,6 +65,7 @@ const Header: React.FC<HeaderProps> = ({
               showRedditPosts ? "Hide Reddit Posts" : "Show Reddit Posts"
             }
             onClick={() => setShowRedditPosts(!showRedditPosts)}
+            active={showRedditPosts}
           />
           <Typography>
             {showRedditPosts ? "Hide Reddit Posts" : "Show Reddit Posts"}
@@ -72,9 +74,7 @@ const Header: React.FC<HeaderProps> = ({
 
         <ListItem>
           <ThemeToggleButton />
-          <Typography>
-            Switch Theme
-          </Typography>
+          <Typography>Switch Theme</Typography>
         </ListItem>
       </List>
     </Box>
@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <AppBar
-      position="static"
+      position="sticky"
       color="default"
       elevation={0}
       sx={{ borderBottom: 1, borderColor: "divider" }}
@@ -108,6 +108,7 @@ const Header: React.FC<HeaderProps> = ({
                     : "Show Food Facilities"
                 }
                 onClick={() => setShowFoodFacilities(!showFoodFacilities)}
+                active={showFoodFacilities}
               />
               <FeatureToggleButton
                 icon={<PostAddIcon />}
@@ -115,6 +116,7 @@ const Header: React.FC<HeaderProps> = ({
                   showRedditPosts ? "Hide Reddit Posts" : "Show Reddit Posts"
                 }
                 onClick={() => setShowRedditPosts(!showRedditPosts)}
+                active={showRedditPosts}
               />
               <ThemeToggleButton />
             </Box>
