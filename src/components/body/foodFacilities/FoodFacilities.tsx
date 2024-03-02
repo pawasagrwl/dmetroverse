@@ -112,11 +112,33 @@ const FoodFacilities: React.FC = () => {
       </Box>
     );
   return (
-    <Paper elevation={3} sx={{ margin: 2, padding: 2 }}>
+    <Paper
+      elevation={3}
+      sx={{
+        margin: 2,
+        padding: 2,
+        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        background: "rgba(0, 0, 0, 0.7)", // This adds a dark semi-transparent background
+        color: "white", // White text for contrast
+        borderRadius: "4px", // Optional: Rounds the corners of the container
+      }}
+    >
       {origin && destination ? (
         <>
-          <Typography variant="h6" gutterBottom>
-            Food Facilities:
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "2rem", // Larger font size
+              margin: "20px 0", // More vertical space
+              textShadow: "2px 2px 8px rgba(0,0,0,0.5)", // Text shadow for pop-out effect
+            }}
+          >
+            Food Facilities
           </Typography>
           <StationFacilitiesWindow stations={stationsData} />
         </>

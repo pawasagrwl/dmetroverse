@@ -1,6 +1,6 @@
 import React from 'react';
 import { Facility, StationData } from '../../../common/types';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../context/ThemeContext'; // Update with the correct path
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -14,16 +14,18 @@ const StationFacilities: React.FC<StationFacilitiesProps> = ({ station }) => {
   const hasNoFacilities = station.facilities.length === 0;
 
   return (
-    <Paper elevation={3} style={{ minWidth: '200px', minHeight: '300px', margin: '1rem', position: 'relative', overflow: 'hidden' }}>
+    <Paper elevation={3} style={{ minWidth: '30vh', width: '30vw', maxHeight: '30vh', margin: '1rem', position: 'relative', overflow: 'hidden' }}>
       <Typography variant="h6" component="h3" style={{
-        backgroundColor: hasNoFacilities ? 'red' : mode === 'dark' ? '#424242' : '#e0e0e0',
-        color: hasNoFacilities ? 'white' : 'inherit',
+        position: 'sticky',
+        top: 0,
+        backgroundColor: hasNoFacilities ? 'red' : 'green',
+        color: 'white',
         padding: '0.5rem',
         textAlign: 'center',
       }}>
         {station.stationName}
       </Typography>
-      <Box style={{ overflowY: 'auto', height: 'calc(100% - 3rem)', padding: '1rem' }}>
+      <Box style={{ overflow: 'scroll', maxHeight: 'calc(100% - 3rem)', padding: '1rem' }}>
         {station.facilities.length > 0 ? (
           station.facilities.flatMap((facility: Facility, facilityIndex) =>
             facility.detail_list.map((detail, index) => (

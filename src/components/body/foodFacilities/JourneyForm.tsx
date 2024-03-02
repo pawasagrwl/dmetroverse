@@ -81,7 +81,7 @@ const JourneyForm: React.FC = () => {
       <Typography variant="h6" align="center" gutterBottom>
         Food Facilities Finder
       </Typography>
-      <Typography variant="body1" align="center" paragraph>
+      <Typography variant="body1" align="center" paragraph >
         Select your origin and destination to find food facilities along your
         route.
       </Typography>

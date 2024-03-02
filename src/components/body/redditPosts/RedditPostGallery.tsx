@@ -22,19 +22,20 @@ const RedditPostGallery: React.FC = () => {
   if (error) return <Typography color="error">Error: {error}</Typography>;
   if (!redditResponse || !redditResponse.data.children) return null;
 
-  const posts = redditResponse.data.children.map(child => {
+  const posts = redditResponse.data.children.map((child) => {
     const postData = child.data;
-    
+
     const imageUrl = postData.preview?.images[0]?.source.url;
-    
+
     let gallery: string[] | undefined;
     if (postData.is_gallery && postData.media_metadata) {
-      gallery = Object.keys(postData.media_metadata)
-        .map(key => postData.media_metadata![key].s.u.replace(/&amp;/g, '&')); // Use non-null assertion operator (!) carefully
+      gallery = Object.keys(postData.media_metadata).map((key) =>
+        postData.media_metadata![key].s.u.replace(/&amp;/g, "&")
+      ); // Use non-null assertion operator (!) carefully
     }
-    
+
     const videoUrl = postData.secure_media?.reddit_video?.fallback_url;
-  
+
     return {
       title: postData.title,
       body: postData.selftext_html,
@@ -47,20 +48,35 @@ const RedditPostGallery: React.FC = () => {
       videoUrl,
     };
   });
-  
 
   return (
-    <Box maxWidth="md" mx="auto">
-      <Typography variant="h5" mb={2}>
-        Posts about Delhi Metro from r/Delhi:
+    <Box maxWidth="md" mx="auto" sx={{ textAlign: "center" }}>
+      <Typography
+        variant="h5"
+        mb={4}
+        sx={{ fontWeight: "bold", color: "primary.main" }}
+      >
+        Posts about Delhi Metro from <br></br>
+        <a
+          href="https://www.reddit.com/r/delhi"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "inherit", textDecoration: "none" }}
+        >
+          r/Delhi
+        </a>
       </Typography>
       <Box
         maxHeight="96vh"
         overflow="auto"
-        border={1}
-        borderColor="grey.300"
-        m={2}
-        p={2}
+        sx={{
+          border: 1,
+          borderColor: "grey.300",
+          m: 2,
+          p: 2,
+          backgroundColor: "background.paper",
+          boxShadow: 1,
+        }}
       >
         {posts.map((post, index) => (
           <RedditPost
