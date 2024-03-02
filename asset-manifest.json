@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/dmetroverse/static/css/main.512e3347.css",
-    "main.js": "/dmetroverse/static/js/main.d8317660.js",
+    "main.js": "/dmetroverse/static/js/main.5c433f30.js",
     "static/js/787.4d6a50c9.chunk.js": "/dmetroverse/static/js/787.4d6a50c9.chunk.js",
     "index.html": "/dmetroverse/index.html",
     "main.512e3347.css.map": "/dmetroverse/static/css/main.512e3347.css.map",
-    "main.d8317660.js.map": "/dmetroverse/static/js/main.d8317660.js.map",
+    "main.5c433f30.js.map": "/dmetroverse/static/js/main.5c433f30.js.map",
     "787.4d6a50c9.chunk.js.map": "/dmetroverse/static/js/787.4d6a50c9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.512e3347.css",
-    "static/js/main.d8317660.js"
+    "static/js/main.5c433f30.js"
   ]
 }
