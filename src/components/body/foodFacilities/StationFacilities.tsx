@@ -1,6 +1,6 @@
 import React from 'react';
 import { Facility, StationData } from '../../../common/types';
-import { useTheme } from '../../../context/ThemeContext'; // Update with the correct path
+import { useTheme } from '../../../context/ThemeContext';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';

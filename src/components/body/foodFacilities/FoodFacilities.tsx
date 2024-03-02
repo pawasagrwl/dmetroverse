@@ -19,27 +19,12 @@ const FoodFacilities: React.FC = () => {
   const [isDone, setIsDone] = useState(false);
   const { response: routeData, error, isPending } = useFetch<RouteData>(apiURL);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  
-  useEffect(() => {
-    if (isPending) {
-      // This timeout is to simulate loading progress - replace with actual loading logic
-      const progressInterval = setInterval(() => {
-        setLoadingProgress((oldProgress) => {
-          if (oldProgress === 100) {
-            clearInterval(progressInterval);
-            return 100;
-          }
-          const diff = Math.random() * 10;
-          return Math.min(oldProgress + diff, 100);
-        });
-      }, 500);
-    }
-  }, [isPending]);
 
   useEffect(() => {
     const fetchStationsData = async () => {
       const allMapPathsData: StationData[][] = [];
       setIsDone(false);
+      setLoadingProgress(0);
       if (routeData && routeData.route.length > 0) {
         for (const routeObj of routeData.route) {
           const stationCodesSet: Set<string> = new Set();
@@ -51,6 +36,8 @@ const FoodFacilities: React.FC = () => {
 
           const stationCodes = Array.from(stationCodesSet);
           const stationDataArr: StationData[] = [];
+          const totalStations = stationCodes.length;
+          let stationsFetched = 0;
 
           // Fetch each station's data
           for (const stationCode of stationCodes) {
@@ -78,6 +65,12 @@ const FoodFacilities: React.FC = () => {
               stationName: stationData.station_name,
               facilities: foodFacilities,
             });
+            // Update progress
+            stationsFetched += 1;
+            setLoadingProgress((prevProgress) => {
+              const newProgress = (stationsFetched / totalStations) * 100;
+              return Math.max(prevProgress, newProgress);
+            });
           }
           allMapPathsData.push(stationDataArr);
         }
@@ -85,8 +78,11 @@ const FoodFacilities: React.FC = () => {
       setStationsData(allMapPathsData);
       setIsDone(true);
     };
-    fetchStationsData();
-  }, [routeData]);
+    if (apiURL) {
+      // Only start fetching if there is a valid URL
+      fetchStationsData();
+    }
+  }, [routeData, apiURL]);
 
   if (error)
     return (
