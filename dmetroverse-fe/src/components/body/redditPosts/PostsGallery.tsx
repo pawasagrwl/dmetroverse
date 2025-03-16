@@ -5,8 +5,9 @@ import { RedditPostData } from "../../../common/types";
 import { Box, Typography, CircularProgress } from "@mui/material";
 
 const PostsGallery: React.FC = () => {
-  const url =
-    "https://www.reddit.com/r/delhi/search.json?q=title:metro&restrict_sr=1&sort=new&limit=100";
+  const be_port = process.env.REACT_APP_BE_PORT ?? 3000;
+  const be_url = `http://localhost:${be_port}`;
+  const url = `${be_url}/reddit-posts`;
   const {
     response: redditResponse,
     error,
