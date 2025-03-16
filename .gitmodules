@@ -1,0 +1,6 @@
+[submodule "dmetroverse-fe"]
+	path = dmetroverse-fe
+	url = git@github.com:dmetroverse/dmetroverse-fe.git
+[submodule "dmetroverse.github.io"]
+	path = dmetroverse.github.io
+	url = git@github.com:dmetroverse/dmetroverse.github.io.git
