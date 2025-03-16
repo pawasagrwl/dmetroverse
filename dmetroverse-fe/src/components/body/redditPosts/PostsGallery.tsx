@@ -6,7 +6,7 @@ import { Box, Typography, CircularProgress } from "@mui/material";
 
 const PostsGallery: React.FC = () => {
   const be_port = process.env.REACT_APP_BE_PORT ?? 3000;
-  const be_url = `http://localhost:${be_port}`;
+  const be_url = process.env.REACT_APP_BE_URL ?? `http://localhost:${be_port}`;
   const url = `${be_url}/reddit-posts`;
   const {
     response: redditResponse,

@@ -1,6 +1,18 @@
-# DMetroVerse Back-End Server
+# DMetroVerse Back-End Server (⚠️ **Project Abandoned**)
 
-## Setting Up
+## **⚠️ Project Status: Abandoned**
+DMetroVerse's backend is **no longer functional** because the **Delhi Metro Rail API is blocking all requests**.  
+Despite multiple attempts to bypass these restrictions using:
+- **Cloudscraper** (Blocked by Cloudflare challenges)
+- **FlareSolverr** (Timed out on Fly.io)
+- **Puppeteer (Headless & Non-Headless)** (Only worked manually, failed on Fly.io)
+- **Fly.io Tweaks** (Didn't help)
+
+None of these solutions worked consistently. Since this project was made for fun and isn't actively used by the creator, **no further development will continue.**  
+
+---
+
+## Setting Up (No Longer Useful)
 
 ### Environment Variables
 
@@ -13,26 +25,34 @@ FE_PORT=3001
 FE_URL=http://your-frontend-url.com
 ```
 
-- `SECRET_TOKEN`: This is for future use when you might want to use a middleware to check authorization. Replace `your_secret_token` with your desired secret token.
-- `PORT`: This is the port number where your server will run. If not provided, the server will run on port 3000 by default.
-- `FE_PORT`: This is the port number where your front-end application runs in your local development environment.
-- `FE_URL`: This is the URL of your front-end application when it is deployed.
+- `SECRET_TOKEN`: Placeholder for future authorization (irrelevant now).
+- `PORT`: The port number where your server runs (default: 3000).
+- `FE_PORT`: The front-end application's local port.
+- `FE_URL`: The deployed front-end URL.
 
 ### CORS Configuration
 
-The server uses the `cors` middleware to enable Cross-Origin Resource Sharing (CORS). This is necessary to allow your front-end application to communicate with this server. The CORS options are set to only allow requests from your front-end application, whether it is in the local development environment (`http://localhost:${FE_PORT}`) or deployed (`${FE_URL}`).
+The server uses the `cors` middleware to enable Cross-Origin Resource Sharing (CORS). However, since the backend **can no longer fetch metro data**, this is no longer relevant.
 
-## Running the Server
+---
 
-After setting up, you can start the server by running:
+## Running the Server (⚠️ **Will Not Work**)
 
 ```bash
 npm install
 npm start
 ```
 
-You should see a console log saying "Server running on port ${PORT}".
+Even if the server runs, **API requests will fail** due to Delhi Metro's Cloudflare restrictions.
 
-## Deploying the Server
+---
 
-This server is designed to be deployed on Fly.io. Follow the [Fly.io documentation](https://fly.io/docs/getting-started/) to learn how to deploy this server.
+## Deploying the Server (No Longer Needed)
+
+This server was deployed on **Fly.io**, but it **no longer serves any purpose** since requests to the Delhi Metro API **are blocked**.
+
+---
+
+## Contributing
+
+This project is **no longer maintained**. If you find a way to bypass Cloudflare restrictions, feel free to **fork the repository and experiment**.

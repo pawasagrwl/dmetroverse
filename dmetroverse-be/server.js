@@ -12,10 +12,18 @@ const feUrl = process.env.FE_URL || "";
 // Configure CORS
 app.use(
   cors({
-    origin: [feUrl, `http://localhost:${process.env.FE_PORT || 3000}`],
+    origin: [
+      feUrl, 
+      `http://localhost:${process.env.FE_PORT || 3000}`,
+      "https://pawasagrwl.github.io" // Allow GitHub Pages
+    ],
+    methods: ["GET"],
+    allowedHeaders: ["Content-Type"],
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
+
 app.use(express.json());
 
 // Serve static files (for the HTML page)
@@ -28,6 +36,10 @@ const getCurrentTimeInIST = () =>
 // Logger Middleware
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  res.header("Access-Control-Allow-Origin", "https://pawasagrwl.github.io"); // Allow GitHub Pages
+  res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 
@@ -44,29 +56,42 @@ app.get('/:origin/:destination/:type?', async (req, res) => {
 
   console.log(`Fetching Metro Route: ${apiEndpoint}`);
 
-  try {
-    const response = await fetch(apiEndpoint, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        'Referer': 'https://www.delhimetrorail.com/',
-        'Origin': 'https://www.delhimetrorail.com',
-        'Accept': 'application/json'
-      },
-    });
+  const maxRetries = 3;
+  let attempt = 0;
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+  while (attempt < maxRetries) {
+    try {
+      const response = await cloudscraper.get({
+        url: apiEndpoint,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          'Referer': 'https://www.delhimetrorail.com/',
+          'Origin': 'https://www.delhimetrorail.com',
+          'Accept': 'application/json',
+        },
+      });
+
+      // If Cloudflare returns an HTML page, it means we got blocked
+      if (response.startsWith('<!DOCTYPE html>')) {
+        throw new Error('Cloudflare returned an HTML page instead of JSON');
+      }
+
+      console.log('✅ Metro API Response Received');
+      return res.json(JSON.parse(response));
+
+    } catch (error) {
+      console.error(`❌ Metro API Fetch Error (Attempt ${attempt + 1}):`, error.message);
+
+      if (attempt === maxRetries - 1) {
+        return res.status(500).json({ error: 'Failed to fetch metro data after multiple attempts' });
+      }
+
+      attempt++;
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retrying
     }
-
-    const data = await response.json();
-    console.log('✅ Metro API Response Received');
-    res.json(data);
-
-  } catch (error) {
-    console.error('❌ Metro API Fetch Error:', error.message);
-    res.status(500).json({ error: 'Failed to fetch metro data' });
   }
 });
+
 
 
 // Reddit Posts API
