@@ -27,7 +27,7 @@ const Footer = () => {
       }}
     >
       <Link
-        href="https://github.com/dmetroverse/dmetroverse-code"
+        href="https://github.com/pawasagrwl/dmetroverse"
         target="_blank"
         rel="noopener noreferrer"
         sx={{
@@ -48,7 +48,7 @@ const Footer = () => {
           textAlign: "center", // Center the text
         }}
       >
-        &copy; {new Date().getFullYear()} DMetroVerse
+        &copy; {new Date().getFullYear()} Pawas Aggarwal
       </Typography>
     </Box>
   );
