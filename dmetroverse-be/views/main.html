@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMetroVerse API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; padding: 20px; background-color: #f4f4f4; }
+        h1 { color: #333; text-align: center; }
+        p { text-align: center; color: #666; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .routes { margin-top: 20px; }
+        .route { margin: 10px 0; padding: 10px; background: #e8e8e8; border-radius: 5px; }
+        .route a { text-decoration: none; color: #007BFF; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚇 DMetroVerse Backend API</h1>
+        <p>This API serves as middle man for DMetroVerse App.</p>
+
+        <h2>Available Endpoints:</h2>
+        <div class="routes">
+            <div class="route">📌 <strong><a href="/main">/main</a></strong> - API overview (this page)</div>
+            <div class="route">🚉 <strong>/&lt;origin&gt;/&lt;destination&gt;/[type]</strong> - Fetch metro route data (type: 'least-distance' or 'minimum-interchange')<br>
+                <small>Example: <a href="/JIEE/SP/least-distance">/JIEE/SP/least-distance</a></small>
+            </div>
+            <div class="route">🔍 <strong><a href="/reddit-posts">/reddit-posts</a></strong> - Fetch latest Reddit posts about Delhi Metro</div>
+            <div class="route">🕒 <strong><a href="/test">/test</a></strong> - Fetch metro data with a simulated future timestamp</div>
+        </div>
+    </div>
+</body>
+</html>

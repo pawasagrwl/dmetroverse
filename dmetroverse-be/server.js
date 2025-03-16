@@ -1,128 +1,114 @@
-require('dotenv').config();
-
-const express = require('express');
-const cloudscraper = require('cloudscraper');
-const fetch = require('node-fetch');
-const cors = require('cors');
+require("dotenv").config();
+const express = require("express");
+const fetch = require("node-fetch");
+const cloudscraper = require("cloudscraper");
+const cors = require("cors");
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3000;
-const fePort = process.env.FE_PORT;
-const feUrl = process.env.FE_URL || ''; // default to empty string if not defined
+const feUrl = process.env.FE_URL || "";
 
-// Optional: Configure CORS options if needed
-const corsOptions = {
-  origin: [`http://localhost:${fePort}`, feUrl],
-  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
-};
+// Configure CORS
+app.use(
+  cors({
+    origin: [feUrl, `http://localhost:${process.env.FE_PORT || 3000}`],
+    credentials: true,
+  })
+);
+app.use(express.json());
 
-// Uncomment these if you wish to enable CORS or JSON parsing
-// app.use(cors(corsOptions));
-// app.use(express.json());
+// Serve static files (for the HTML page)
+app.use(express.static(path.join(__dirname, "views")));
 
-// Utility function to compute the current time in IST (without timezone info)
-const getCurrentTimeInIST = () => {
-  let now = new Date();
-  now = new Date(now.getTime() + ((5 * 60 + 30) * 60000)); // Offset by 5 hours and 30 minutes
-  return now.toISOString().split('Z')[0]; // Remove the 'Z' to make it naive
-};
+// Utility: Get current time in IST (without timezone info)
+const getCurrentTimeInIST = () =>
+  new Date(Date.now() + (5 * 60 + 30) * 60000).toISOString().split("Z")[0];
 
-app.get('/', (req, res) => {
-  res.redirect(`${feUrl}`);
-});
-
-// Middleware to validate incoming URL parameters for the dynamic route
-const validateParams = (req, res, next) => {
-  const { origin, destination, type } = req.params;
-  if (!origin || !destination) {
-    return res.status(400).send('Origin and destination parameters are required.');
-  }
-  if (type && !['least-distance', 'minimum-interchange'].includes(type)) {
-    return res.status(400).send('Invalid type parameter.');
-  }
-  next();
-};
-
-// Create a persistent cookie jar so that Cloudflare clearance cookies persist across requests
-const jar = cloudscraper.jar();
-
-// Log incoming requests for debugging purposes
+// Logger Middleware
 app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log(`Headers: ${JSON.stringify(req.headers)}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
 
-// Endpoint to fetch data from the Delhi Metro Rail API using cloudscraper
-app.get('/:origin/:destination/:type?', validateParams, async (req, res) => {
-  const { origin, destination, type } = req.params;
-  const routeType = type === 'mi' ? 'minimum-interchange' : 'least-distance';
-  const currentTime = getCurrentTimeInIST();
-  const apiEndpoint = `https://backend.delhimetrorail.com/api/v2/en/station_route/${origin}/${destination}/${routeType}/${currentTime}`;
+// Root Redirect
+app.get("/", (_, res) => res.redirect(feUrl));
 
-  console.log(`Outgoing request to: ${apiEndpoint}`);
+// Metro Route API
+app.get('/:origin/:destination/:type?', async (req, res) => {
+  const { origin, destination, type } = req.params;
+  if (!origin || !destination) return res.status(400).json({ error: 'Origin and destination are required.' });
+
+  const routeType = type === 'mi' ? 'minimum-interchange' : 'least-distance';
+  const apiEndpoint = `https://backend.delhimetrorail.com/api/v2/en/station_route/${origin}/${destination}/${routeType}/${getCurrentTimeInIST()}`;
+
+  console.log(`Fetching Metro Route: ${apiEndpoint}`);
 
   try {
-    const response = await cloudscraper({
-      method: 'GET',
-      url: apiEndpoint,
-      jar, // use the persistent cookie jar for Cloudflare clearance cookies
+    const response = await fetch(apiEndpoint, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         'Referer': 'https://www.delhimetrorail.com/',
-        'Origin': 'https://www.delhimetrorail.com'
+        'Origin': 'https://www.delhimetrorail.com',
+        'Accept': 'application/json'
       },
     });
-    console.log('Response received successfully');
-    res.send(response);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('✅ Metro API Response Received');
+    res.json(data);
+
   } catch (error) {
-    console.error('Error during fetch:', error.message);
-    res.status(500).send('Internal Server Error');
+    console.error('❌ Metro API Fetch Error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch metro data' });
   }
 });
 
-// New /test route that uses node-fetch with current time + 50 minutes instead of a hardcoded time
-app.get('/test', (req, res) => {
-  const now = new Date();
-  const futureTime = new Date(now.getTime() + 50 * 60000); // add 50 minutes
-  // Format the time as ISO string without the trailing "Z"
-  const isoTime = futureTime.toISOString().split('Z')[0];
-  
-  const apiUrl = `https://backend.delhimetrorail.com/api/v2/en/station_route/JIEE/SP/least-distance/${isoTime}`;
-  console.log(`Fetching from /test endpoint with URL: ${apiUrl}`);
-  
-  fetch(apiUrl, {
-    headers: {
-      'Referer': 'https://www.delhimetrorail.com/',
-      'Origin': 'https://www.delhimetrorail.com'
-    }
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      res.json(data);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-      res.status(500).send('Error fetching data');
-    });
-});
 
-app.get("/reddit-posts", async (req, res) => {
-  const url =
+// Reddit Posts API
+app.get("/reddit-posts", async (_, res) => {
+  const redditApi =
     "https://www.reddit.com/r/delhi/search.json?q=title:metro&restrict_sr=1&sort=new&limit=100";
 
   try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    const data = await response.json();
-    res.json(data);
+    const response = await fetch(redditApi);
+    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+    res.json(await response.json());
   } catch (error) {
-    console.error("Error fetching Reddit posts:", error);
+    console.error("Reddit API Error:", error.message);
     res.status(500).json({ error: "Failed to fetch Reddit posts" });
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Test Endpoint (Future Time Handling)
+app.get("/test", async (_, res) => {
+  const futureTime = new Date(Date.now() + 50 * 60000)
+    .toISOString()
+    .split("Z")[0];
+  const apiUrl = `https://backend.delhimetrorail.com/api/v2/en/station_route/JIEE/SP/least-distance/${futureTime}`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        Referer: "https://www.delhimetrorail.com/",
+        Origin: "https://www.delhimetrorail.com",
+      },
+    });
+    res.json(await response.json());
+  } catch (error) {
+    console.error("Test API Error:", error.message);
+    res.status(500).json({ error: "Failed to fetch test data" });
+  }
 });
+
+// Serve /main as an HTML page
+app.get("/main", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "main.html"));
+});
+
+// Start Server
+app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
